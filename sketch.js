@@ -3,7 +3,7 @@ let canvas;
 
 let players = [], playersBackUp = []; tubes = [];
 
-let generation = 0;
+let generation = 1;
 let record = 0;
 let currentScore = 0;
 

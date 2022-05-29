@@ -3,6 +3,10 @@ let canvas;
 
 let players = [], playersBackUp = []; tubes = [];
 
+let generation = 0;
+let record = 0;
+let currentScore = 0;
+
 const populationSize = 800;
 
 function preload() {
@@ -69,18 +73,32 @@ function draw() {
 
 	players = players.filter(player => !player.dead);
 
+	showScore();
+
 	if (players.length === 0) {
 		tubes = [];
 		players = createNewGeneration(playersBackUp);
 		playersBackUp = players;
 
 		console.log('new generation');
+		generation ++;
 	}
 }
 
-addEventListener('click', (e) => {
-  // player.fly();
-});
+function showScore() {
+	const maxScore = Math.max(...players.map(p => p.score));
+	currentScore = maxScore;
+
+	if (currentScore > record) {
+		record = currentScore;
+	}
+
+	text('Generation: ' + generation, 550, 64)
+	text('Score: ' + currentScore, 550, 128);
+  text('Best: ' + record, 550, 192);
+	textSize(32);
+	fill(500, 500, 500, 500);
+}
 
 addEventListener('keypress', (e) => {
 	if (e.key === 's') {

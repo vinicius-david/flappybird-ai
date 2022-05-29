@@ -52,17 +52,13 @@ class NeuralNetwork {
   }
 
   mutate() {
-    const bias1 = Math.floor(Math.random() * this.hiddenNodes);
-    const bias2 = Math.floor(Math.random() * this.outputNodes);
-    const input1 = Math.floor(Math.random() * this.inputNodes);
-    const input2 = Math.floor(Math.random() * this.hiddenNodes);
-    const hidden1 = Math.floor(Math.random() * this.hiddenNodes);
-    const hidden2 = Math.floor(Math.random() * this.outputNodes);
+    let input1 = Math.floor(Math.random() * this.inputNodes);
+    let input2 = Math.floor(Math.random() * this.hiddenNodes);
+    let hidden1 = Math.floor(Math.random() * this.hiddenNodes);
+    let hidden2 = Math.floor(Math.random() * this.outputNodes);
 
-    // this.biasInputHidden.data[bias1] = Math.random() * 2 - 1;
-    // this.biasHiddenOutput.data[bias2] = Math.random() * 2 - 1;
-    this.inputWeigths.data[input2][input1] = Math.random() * 2 - 1;
-    this.hiddenWeigths.data[hidden2][hidden1] = Math.random() * 2 - 1;
+    this.inputWeigths.data[input2][input1] = Math.random() * 1.5 - 1;
+    this.hiddenWeigths.data[hidden2][hidden1] = Math.random() * 1.5 - 1;
 
     return this;
   }

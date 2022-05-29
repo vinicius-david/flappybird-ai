@@ -5,6 +5,8 @@ class Player {
     this.velocity = 0;
     this.aceleration = -10;
     this.alpha = 0.99;
+    this.width = birdSprite.width;
+    this.height = birdSprite.height;
   }
 
   draw() {

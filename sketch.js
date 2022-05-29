@@ -1,7 +1,9 @@
 let birdSprite, topPipeSprite, bottomPipeSprite, backgroundSprite, groundSprite;
 let canvas;
 
-let player, tubes = [];
+let players = [], playersBackUp = []; tubes = [];
+
+const populationSize = 800;
 
 function preload() {
 	birdSprite = loadImage("images/fatBird.png");
@@ -14,11 +16,15 @@ function preload() {
 
 function setup() {
 	canvas = createCanvas(1200, 800);
-	frameRate(45);
 
 	background = new Background();
 	ground = new Ground();
-	player = new Player();
+
+	for (let i = 0; i < populationSize; i++) {
+		players.push(new Player());
+	}
+
+	playersBackUp = players;
 }
 
 function draw() {
@@ -31,18 +37,57 @@ function draw() {
 		const randomizedY = Math.random() * 400 + 100;
 		tubes = tubes.filter(tube => tube.dead === false);
 		tubes.push(new Tube({ position: 'top', y: randomizedY }));
-		tubes.push(new Tube({ position: 'bottom', y: randomizedY + 175 }));
+		tubes.push(new Tube({ position: 'bottom', y: randomizedY + 190 }));
 	}
 
-	tubes.forEach(tube => tube.update());
+	let checkScore = false;
+	tubes.forEach(tube => {
+		const result = tube.update(players);
 
-	tubes.forEach(tube => detectColision(player, tube));
+		if (!checkScore) {
+			checkScore = result;
+		}
+	});
+	
+	players.forEach(player => {
+		let colided = false;
+		tubes.some(tube => {
+			if (detectColision(player, tube)) {
+				colided = true;
+				return true;
+			} else {
+				return false;
+			}
+		});
 
-	player.update();
+		if (colided) {
+			player.dead = true;
+		} else {
+			player.update(tubes, checkScore);
+		}
+	});
+
+	players = players.filter(player => !player.dead);
+
+	if (players.length === 0) {
+		tubes = [];
+		players = createNewGeneration(playersBackUp);
+		playersBackUp = players;
+
+		console.log('new generation');
+	}
 }
 
 addEventListener('click', (e) => {
-  player.fly();
+  // player.fly();
+});
+
+addEventListener('keypress', (e) => {
+	if (e.key === 's') {
+		loop();
+	} else {
+		noLoop();
+	}
 });
 
 function detectColision(player, tube) {
@@ -56,5 +101,6 @@ function detectColision(player, tube) {
 			yColision = (player.y + player.height > tube.y);
 		}
 	}
-	console.log(xColision && yColision);
+
+	return xColision && yColision;
 }

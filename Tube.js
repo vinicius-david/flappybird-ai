@@ -8,6 +8,7 @@ class Tube {
     this.y = y;
     this.width = topPipeSprite.width;
     this.height = this.position === 'top' ? y : canvas.height;
+    this.passed = false;
   }
 
   draw() {
@@ -22,7 +23,7 @@ class Tube {
     }
   }
 
-  update() {
+  update(players) {
     this.x += this.velocity;
     this.velocity += this.acceleration;
 
@@ -31,5 +32,12 @@ class Tube {
     }
 
     this.draw();
+
+    if (!this.passed && players[0] && players[0].x > (this.x + this.width)) {
+      this.passed = true;
+      return true;
+    }
+
+    return false;
   }
 }
